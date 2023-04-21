@@ -5,11 +5,11 @@ import structures.Net
 import kotlin.math.pow
 
 abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : Net<K, V, SplayNode<K, V>>(centers) {
-    override var head = SplayNode<K, V>(null, null)
-    override var tail = SplayNode<K, V>(null, null)
+    final override var head = SplayNode<K, V>(null, null)
+    final override var tail = SplayNode<K, V>(null, null)
     protected var accessCounter = 0.0
     protected var maxLevel = 0
-    protected val mainStopCondition =
+    protected val mainStopCondition : (SplayNode<K, V>, Int) -> Boolean = { node, _ -> node == head}
 
     protected fun newLevel() {
         if (2.0.pow(maxLevel) <= accessCounter) {
@@ -45,14 +45,15 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : N
     }
 
     protected fun update(updated: SplayNode<K, V>,
-                       changes: () -> Any,
-                       plus: Int,
-                       stopCondition: (SplayNode<K, V>) -> Boolean) : SplayNode<K, V> {
+                         changes: () -> Any,
+                         plus: Int,
+                         stopCondition: (SplayNode<K, V>, Int) -> Boolean) : SplayNode<K, V> {
         var current = updated
         newLevel()
+        var currentHeight = 0
 
-        while (!stopCondition(current)) {
-            val currentHeight = current.topLevel
+        while (!stopCondition(current, currentHeight)) {
+            currentHeight = current.topLevel
             val previous = current.previous[currentHeight]
             addHits(previous, currentHeight + 1, plus)
 
@@ -123,7 +124,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : N
         node.previous.add(parent)
         parent.next[0] = node
         next.previous[0] = node
-        update(node) {}
+        update(node, {}, 1, mainStopCondition)
     }
 
 }

@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test
 import structures.Net
 import structures.skipList.SkipListNet
 import structures.splayNet.SimpleSplayListNet
+import structures.splayNet.TreeSplayListNet
 import java.util.*
 import kotlin.math.pow
 
@@ -56,5 +57,10 @@ class RepeatedSending {
     @Test
     fun `SimpleSplayListNetTest`() {
         repeat { centers -> SimpleSplayListNet(centers) }
+    }
+
+    @Test
+    fun `TreeSplayListNetTest`() {
+        repeat { centers -> TreeSplayListNet(centers) }
     }
 }
