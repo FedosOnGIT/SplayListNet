@@ -44,6 +44,11 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : N
         }
     }
 
+    protected fun visit(updated: SplayNode<K, V>) {
+        updated.selfHits++
+        accessCounter++
+    }
+
     protected fun update(updated: SplayNode<K, V>,
                          changes: () -> Any,
                          plus: Int,
@@ -124,6 +129,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : N
         node.previous.add(parent)
         parent.next[0] = node
         next.previous[0] = node
+        visit(node)
         update(node, {}, 1, mainStopCondition)
     }
 
