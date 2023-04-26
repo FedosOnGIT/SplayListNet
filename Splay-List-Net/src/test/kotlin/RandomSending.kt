@@ -1,8 +1,9 @@
 import model.Node
 import org.junit.jupiter.api.Test
 import structures.Net
-import structures.skipList.SkipListNet
-import structures.splayNet.SimpleSplayListNet
+import structures.head_dependent.skipList.SkipListNet
+import structures.head_dependent.splayNet.SimpleSplayListNet
+import structures.head_dependent.splayNet.TreeSplayListNet
 import java.util.*
 
 class RandomSending {
@@ -13,7 +14,7 @@ class RandomSending {
         }
         val net = creation(centers)
         val random = Random()
-        var sumSteps = 0
+        var sumSteps = 0L
 
         for (i in 0 until 100000) {
             val start = random.nextInt(0, 10000 - 1)
@@ -35,5 +36,10 @@ class RandomSending {
     @Test
     fun `SimpleSplayListNetTest`() {
         netTesting { centers -> SimpleSplayListNet(centers) }
+    }
+
+    @Test
+    fun `TreeSplayListNetTest`() {
+        netTesting { centers -> TreeSplayListNet(centers) }
     }
 }

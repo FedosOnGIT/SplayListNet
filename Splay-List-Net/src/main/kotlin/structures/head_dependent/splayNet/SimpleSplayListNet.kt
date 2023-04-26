@@ -1,12 +1,12 @@
-package structures.splayNet
+package structures.head_dependent.splayNet
 
 import model.SplayNode
 
 class SimpleSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
     SplayListNet<K, V>(centers) {
 
-    override fun send(start: SplayNode<K, V>, finish: K, function: (V, V) -> Unit): Int {
-        var steps = 0
+    override fun send(start: SplayNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
+        var steps = 0L
         val changes = { steps++ }
 
         visit(start)

@@ -1,10 +1,14 @@
-package structures.splayNet
+package structures.head_dependent.splayNet
 
+import com.sun.jdi.BooleanValue
 import model.SplayNode
 import structures.Net
+import structures.SplayUpdater
+import structures.head_dependent.HeadDependentNet
 import kotlin.math.pow
 
-abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : Net<K, V, SplayNode<K, V>>(centers) {
+abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
+    HeadDependentNet<K, V, SplayNode<K, V>>(centers) {
     final override var head = SplayNode<K, V>(null, null)
     final override var tail = SplayNode<K, V>(null, null)
     protected var accessCounter = 0.0
@@ -49,16 +53,15 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : N
         accessCounter++
     }
 
-    protected fun update(updated: SplayNode<K, V>,
-                         changes: () -> Any,
-                         plus: Int,
-                         stopCondition: (SplayNode<K, V>, Int) -> Boolean) : SplayNode<K, V> {
+    fun update(updated: SplayNode<K, V>,
+               changes: () -> Any,
+               plus: Int,
+               stopCondition: (SplayNode<K, V>, Int) -> Boolean): SplayNode<K, V> {
         var current = updated
         newLevel()
-        var currentHeight = 0
+        var currentHeight = current.topLevel
 
         while (!stopCondition(current, currentHeight)) {
-            currentHeight = current.topLevel
             val previous = current.previous[currentHeight]
             addHits(previous, currentHeight + 1, plus)
 
@@ -66,8 +69,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : N
             val descendingCondition = (accessCounter) / (2.0.pow(maxLevel - currentHeight))
 
             //region ascending condition
-            if (previous.topLevel > currentHeight &&
-                previous.hits[currentHeight + 1] - previous.hits[currentHeight] > ascendingCondition) {
+            if (previous.topLevel > currentHeight && previous.hits[currentHeight + 1] - previous.hits[currentHeight] > ascendingCondition) {
                 val next = previous.next[currentHeight + 1]
 
                 current.next.add(next)
@@ -93,6 +95,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : N
             }
             //endregion
             current = previous
+            currentHeight = current.topLevel
             changes()
         }
         return current

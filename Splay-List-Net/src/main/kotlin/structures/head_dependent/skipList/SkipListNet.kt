@@ -1,11 +1,12 @@
-package structures.skipList
+package structures.head_dependent.skipList
 
 import model.SkipNode
 import structures.Net
+import structures.head_dependent.HeadDependentNet
 import java.util.*
 
-class SkipListNet<K : Comparable<K>, V>(
-    centers: List<Pair<K, V>>, val random: Random = Random()) : Net<K, V, SkipNode<K, V>>(centers) {
+class SkipListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>, val random: Random = Random()) :
+    HeadDependentNet<K, V, SkipNode<K, V>>(centers) {
 
     override var tail = SkipNode<K, V>(null, null)
     override var head = SkipNode<K, V>(null, null)
@@ -15,15 +16,13 @@ class SkipListNet<K : Comparable<K>, V>(
         initiation()
     }
 
-    override fun send(start: SkipNode<K, V>, finish: K, function: (V, V) -> Unit): Int {
-        var steps = 0
+    override fun send(start: SkipNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
+        var steps = 0L
 
         var current = start
         var currentLevel = start.topLevel
         //region high
-        while (current.next[currentLevel].key != null
-            && current.next[currentLevel].key!! < finish
-        ) {
+        while (current.next[currentLevel].key != null && current.next[currentLevel].key!! < finish) {
             current = current.next[currentLevel]
             currentLevel = current.topLevel
             steps++
@@ -32,9 +31,7 @@ class SkipListNet<K : Comparable<K>, V>(
 
         //region down
         for (index in currentLevel downTo 0) {
-            while (current.next[index].key != null
-                && current.next[index].key!! <= finish
-            ) {
+            while (current.next[index].key != null && current.next[index].key!! <= finish) {
                 current = current.next[index]
                 steps++
             }
@@ -64,9 +61,7 @@ class SkipListNet<K : Comparable<K>, V>(
 
         var current = head
         for (currentLevel in head.topLevel downTo 0) {
-            while (current.next[currentLevel].key != null
-                && current.next[currentLevel].key!! < node.key!!
-            ) {
+            while (current.next[currentLevel].key != null && current.next[currentLevel].key!! < node.key!!) {
                 current = current.next[currentLevel]
             }
 
@@ -87,9 +82,7 @@ class SkipListNet<K : Comparable<K>, V>(
         }
         var current = head
         for (currentLevel in head.topLevel - 1..0) {
-            while (current.next[currentLevel].key != null
-                && current.next[currentLevel].key!! < node.key
-            ) {
+            while (current.next[currentLevel].key != null && current.next[currentLevel].key!! < node.key) {
                 current = current.next[currentLevel]
             }
 
