@@ -1,4 +1,4 @@
-import structures.skipList.SkipListNet
+import structures.head_dependent.skipList.SkipListNet
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -9,7 +9,7 @@ fun main() {
     }
     val net = SkipListNet(centers)
     val random = Random()
-    var sumSteps = 0
+    var sumSteps = 0L
 
     for (i in 0 until  10000) {
         val start = random.nextInt(0, 1000 - 1)
