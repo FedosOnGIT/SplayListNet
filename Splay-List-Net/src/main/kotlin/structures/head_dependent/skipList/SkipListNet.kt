@@ -1,7 +1,6 @@
 package structures.head_dependent.skipList
 
 import model.SkipNode
-import structures.Net
 import structures.head_dependent.HeadDependentNet
 import java.util.*
 

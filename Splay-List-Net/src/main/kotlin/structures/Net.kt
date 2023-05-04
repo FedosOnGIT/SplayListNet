@@ -1,8 +1,9 @@
 package structures
 
 import model.Node
+import model.ServerNode
 
-abstract class Net<K : Comparable<K>, V, N : Node<K, V, N>>(private var centers: List<Pair<K, V>>) {
+abstract class Net<K : Comparable<K>, V, N : Node<K, V>>(private var centers: List<Pair<K, V>>) {
 
     val nodes: MutableList<N> = ArrayList()
 

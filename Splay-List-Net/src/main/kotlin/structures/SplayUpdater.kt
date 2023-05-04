@@ -36,9 +36,24 @@ class SplayUpdater<K : Comparable<K>, V>(val newLevel: (Double, Int) -> Boolean)
         return current
     }
 
-    fun update(updated: SplayNode<K, V>,
-               changes: () -> Any,
-               plus: Int,
+    fun insert(key: K, value: V, parent: SplayNode<K, V>, visit: (SplayNode<K, V>) -> Unit,
+               stopCondition: (SplayNode<K, V>, Int) -> Boolean,
+               constructor: (K, V) -> SplayNode<K, V> = { k, v -> SplayNode(k, v, selfHits = 0) }) {
+        if (parent.key == key) {
+            throw RuntimeException("Key $key already exists")
+        }
+        val next = parent.next[0]
+        val node = constructor(key, value)
+        node.hits.add(0)
+        node.next.add(next)
+        node.previous.add(parent)
+        parent.next[0] = node
+        next.previous[0] = node
+        visit(node)
+        update(node, {}, 1, stopCondition)
+    }
+
+    fun update(updated: SplayNode<K, V>, changes: () -> Any, plus: Int,
                stopCondition: (SplayNode<K, V>, Int) -> Boolean): SplayNode<K, V> {
         var current = updated
         if (newLevel(accessCounter, maxLevel)) {

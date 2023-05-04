@@ -1,4 +1,4 @@
-import model.Node
+import model.ServerNode
 import org.junit.jupiter.api.Test
 import structures.Net
 import structures.head_dependent.skipList.SkipListNet
@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.math.pow
 
 class RepeatedSending {
-    private fun <N : Node<Int, Int, N>> netTesting(
+    private fun <N : ServerNode<Int, Int, N>> netTesting(
         creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>,
         degree: Int
     ) {
@@ -35,7 +35,7 @@ class RepeatedSending {
         print("${sumSteps / 1000 / repeats}, ")
     }
 
-    private fun <N : Node<Int, Int, N>> repeat(creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>) {
+    private fun <N : ServerNode<Int, Int, N>> repeat(creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>) {
         var degree = 0
         while (2.0.pow(degree) < 100000) {
             netTesting(creation, degree)

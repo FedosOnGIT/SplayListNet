@@ -1,13 +1,14 @@
-import model.Node
+import model.ServerNode
 import org.junit.jupiter.api.Test
 import structures.Net
 import structures.head_dependent.skipList.SkipListNet
 import structures.head_dependent.splayNet.SimpleSplayListNet
 import structures.head_dependent.splayNet.TreeSplayListNet
+import structures.head_independent.SkipParentChildNet
 import java.util.*
 
 class RandomSending {
-    private fun <N : Node<Int, Int, N>> netTesting(creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>) {
+    private fun <N : ServerNode<Int, Int, N>> netTesting(creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>) {
         val centers = ArrayList<Pair<Int, Int>>()
         for (i in 0..10000) {
             centers.add(Pair(i, i))
@@ -41,5 +42,10 @@ class RandomSending {
     @Test
     fun `TreeSplayListNetTest`() {
         netTesting { centers -> TreeSplayListNet(centers) }
+    }
+
+    @Test
+    fun `SkipParentChildNetTest`() {
+        netTesting { centers -> SkipParentChildNet(centers, 100) }
     }
 }

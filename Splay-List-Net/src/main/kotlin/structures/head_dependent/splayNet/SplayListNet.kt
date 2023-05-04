@@ -27,7 +27,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
     }
 
     init {
-        updater = SplayUpdater { accessCounter, maxLevel -> newLevel(accessCounter, maxLevel) }
+        updater = SplayUpdater(this::newLevel)
         head.next.add(tail)
         head.hits.add(0)
         tail.previous.add(head)
@@ -42,19 +42,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
     override fun insert(center: Pair<K, V>) {
         val key = center.first
         val parent = updater.find(head, key) {}
-        if (parent.key == key) {
-            throw RuntimeException("Key $key already exists")
-        }
-        val next = parent.next[0]
-
-        val node = SplayNode(key, center.second, selfHits = 0)
-        node.hits.add(0)
-        node.next.add(next)
-        node.previous.add(parent)
-        parent.next[0] = node
-        next.previous[0] = node
-        visit(node)
-        updater.update(node, {}, 1, mainStopCondition)
+        updater.insert(center.first, center.second, parent, this::visit, mainStopCondition)
     }
 
 }

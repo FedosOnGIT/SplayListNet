@@ -1,16 +1,29 @@
-package structures.head_independent
+package structures.head_independent.model
 
+import model.ParentChildSplayNode
 import model.SplayNode
+import structures.Net
 import structures.SplayUpdater
 import kotlin.math.pow
 
-class LeftRightSplayNet<K : Comparable<K>, V>(val middle: K) {
-    private var head = SplayNode<K, V>(null, null)
-    private var leftMiddle = SplayNode<K, V>(null, null)
-    private var rightMiddle = SplayNode<K, V>(null, null)
-    private var tail = SplayNode<K, V>(null, null)
+class LeftRightSplayNet<K : Comparable<K>, V>(val middle: K, centers: List<Pair<K, V>>) :
+    Net<K, V, ParentChildSplayNode<K, V>>(centers) {
+    private var head = ParentChildSplayNode<K, V>(null, null, null)
+    private var leftMiddle = ParentChildSplayNode<K, V>(null, null, null)
+    private var rightMiddle = ParentChildSplayNode<K, V>(null, null, null)
+    private var tail = ParentChildSplayNode<K, V>(null, null, null)
     private val stopCondition: (SplayNode<K, V>, Int) -> Boolean = { node, _ -> node.key == null }
     private val updater: SplayUpdater<K, V>
+
+    override fun processNodes() {
+        var current = head.next[0] as ParentChildSplayNode
+        while (current != tail) {
+            if (current.key != null) {
+                nodes.add(current)
+                current = current.next[0] as ParentChildSplayNode
+            }
+        }
+    }
 
     private fun newLevel(accessCounter: Double, maxLevel: Int): Boolean {
         if (2.0.pow(maxLevel) <= accessCounter) {
@@ -58,29 +71,19 @@ class LeftRightSplayNet<K : Comparable<K>, V>(val middle: K) {
         }
     }
 
-    fun insert(center: Pair<K, V>) {
+    override fun insert(center: Pair<K, V>) {
         val key = center.first
         val parent = if (key <= middle) {
             updater.find(leftMiddle, key) {}
         } else {
             updater.find(rightMiddle, key) {}
         }
-
-        if (parent.key == key) {
-            throw RuntimeException("Key $key already exists")
+        updater.insert(key, center.second, parent, this::visit, stopCondition) { k, v ->
+            ParentChildSplayNode(k, v, null)
         }
-        val next = parent.next[0]
-        val node = SplayNode(key, center.second, selfHits = 0)
-        node.hits.add(0)
-        node.next.add(next)
-        node.previous.add(parent)
-        parent.next[0] = node
-        next.previous[0] = node
-        visit(node)
-        updater.update(node, {}, 1, stopCondition)
     }
 
-    fun send(start: SplayNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
+    override fun send(start: ParentChildSplayNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
         var steps = 0L
         val changes = { steps++ }
 
