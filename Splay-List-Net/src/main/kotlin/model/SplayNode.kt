@@ -1,6 +1,6 @@
 package model
 
-class SplayNode<K : Comparable<K>, V>(
+open class SplayNode<K : Comparable<K>, V>(
     override val key: K?,
     override var value: V?,
     var selfHits: Int = 0,

@@ -1,16 +1,15 @@
 package structures.head_independent
 
 import model.SplayNode
-import structures.Net
 import structures.SplayUpdater
 import kotlin.math.pow
 
-class LeftRightSplayNet<K: Comparable<K>, V>(val middle: K) {
+class LeftRightSplayNet<K : Comparable<K>, V>(val middle: K) {
     private var head = SplayNode<K, V>(null, null)
     private var leftMiddle = SplayNode<K, V>(null, null)
     private var rightMiddle = SplayNode<K, V>(null, null)
     private var tail = SplayNode<K, V>(null, null)
-    private val stopCondition: (SplayNode<K, V>, Int) -> Boolean = {node, _ -> node.key == null}
+    private val stopCondition: (SplayNode<K, V>, Int) -> Boolean = { node, _ -> node.key == null }
     private val updater: SplayUpdater<K, V>
 
     private fun newLevel(accessCounter: Double, maxLevel: Int): Boolean {
@@ -49,10 +48,10 @@ class LeftRightSplayNet<K: Comparable<K>, V>(val middle: K) {
         rightMiddle.next.add(tail)
         tail.previous.add(rightMiddle)
 
-        updater = SplayUpdater {accessCounter, maxLevel -> newLevel(accessCounter, maxLevel)}
+        updater = SplayUpdater { accessCounter, maxLevel -> newLevel(accessCounter, maxLevel) }
     }
 
-    fun visit(node: SplayNode<K, V>) {
+    private fun visit(node: SplayNode<K, V>) {
         node.selfHits++
         if (node.key!! <= middle) {
             updater.accessCounter++
@@ -77,12 +76,21 @@ class LeftRightSplayNet<K: Comparable<K>, V>(val middle: K) {
         node.previous.add(parent)
         parent.next[0] = node
         next.previous[0] = node
+        visit(node)
         updater.update(node, {}, 1, stopCondition)
     }
 
-    fun send(start: SplayNode<K, V>, finish: K, function: (V, V) -> Unit): Int {
-        TODO("Not yet implemented")
+    fun send(start: SplayNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
+        var steps = 0L
+        val changes = { steps++ }
+
+        visit(start)
+        updater.update(start, changes, 1, stopCondition)
+        changes()
+        val end = updater.find(rightMiddle, finish, changes)
+        updater.update(end, changes, 1, stopCondition)
+
+        function(start.value!!, end.value!!)
+        return steps
     }
-
-
 }
