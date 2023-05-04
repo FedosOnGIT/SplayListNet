@@ -7,7 +7,7 @@ class TreeSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : SplayL
     init {
         for (node in nodes) {
             visit(node)
-            update(
+            updater.update(
                 updated = node,
                 changes = {},
                 plus = 1,
@@ -25,15 +25,15 @@ class TreeSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : SplayL
         }
 
         visit(start)
-        val parent = update(start, changes, 1, stopCondition)
-        val end = find(parent, finish, changes)
+        val parent = updater.update(start, changes, 1, stopCondition)
+        val end = updater.find(parent, finish, changes)
         if (end.key != finish) {
             throw RuntimeException("No such key as $finish")
         }
 
         visit(end)
-        update(end, changes, 1, stopCondition)
-        update(parent, changes, 2, mainStopCondition)
+        updater.update(end, changes, 1, stopCondition)
+        updater.update(parent, changes, 2, mainStopCondition)
 
         function(start.value!!, end.value!!)
         return steps

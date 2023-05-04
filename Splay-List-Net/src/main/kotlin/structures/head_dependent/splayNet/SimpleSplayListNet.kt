@@ -10,14 +10,14 @@ class SimpleSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
         val changes = { steps++ }
 
         visit(start)
-        update(start, changes, 1, mainStopCondition)
+        updater.update(start, changes, 1, mainStopCondition)
 
-        val end = find(head, finish, changes)
+        val end =  updater.find(head, finish, changes)
         if (end.key != finish) {
             throw RuntimeException("No such key as $finish")
         }
         visit(end)
-        update(end, changes, 1, mainStopCondition)
+        updater.update(end, changes, 1, mainStopCondition)
 
         function(start.value!!, end.value!!)
         return steps
