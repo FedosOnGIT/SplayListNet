@@ -1,3 +1,4 @@
+import model.Node
 import model.ServerNode
 import org.junit.jupiter.api.Test
 import structures.Net
@@ -8,7 +9,7 @@ import structures.head_independent.SkipParentChildNet
 import java.util.*
 
 class RandomSending {
-    private fun <N : ServerNode<Int, Int, N>> netTesting(creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>) {
+    private fun <N : Node<Int, Int>> netTesting(creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>) {
         val centers = ArrayList<Pair<Int, Int>>()
         for (i in 0..10000) {
             centers.add(Pair(i, i))

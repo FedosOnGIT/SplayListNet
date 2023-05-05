@@ -19,11 +19,12 @@ class SplayUpdater<K : Comparable<K>, V>(val newLevel: (Double, Int) -> Boolean)
         }
     }
 
-    fun find(start: SplayNode<K, V>, key: K, changes: () -> Any): SplayNode<K, V> {
+    fun find(start: SplayNode<K, V>, key: K, changes: () -> Any,
+             comparing: (K, K) -> Boolean = {one, two -> one < two}): SplayNode<K, V> {
         var current = start
         for (currentLevel in current.topLevel downTo 0) {
             var next = current.next[currentLevel]
-            while (next.key != null && next.key!! < key) {
+            while (next.key != null && comparing(next.key!!, key)) {
                 current = next
                 next = current.next[currentLevel]
                 changes()

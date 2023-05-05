@@ -4,7 +4,7 @@ import model.Node
 import model.ParentChildSplayNode
 import structures.Net
 
-data class SearchSplayNode<K : Comparable<K>, V, N : Node<K, V>>(val middle: K?,
+class SearchSplayNode<K : Comparable<K>, V, N : Node<K, V>>(val middle: K?,
                                                                  val net: LeftRightSplayNet<K, V>?,
                                                                  val leaf: Net<K, V, N>?,
                                                                  val left: SearchSplayNode<K, V, N>?,

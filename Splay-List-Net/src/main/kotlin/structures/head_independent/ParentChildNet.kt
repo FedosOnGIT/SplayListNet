@@ -13,11 +13,12 @@ open class ParentChildNet<K : Comparable<K>, V, N : Node<K, V>>(val centers: Lis
 
     init {
         root = create(0, centers.size)
+        initiation()
     }
 
     private fun create(leftIndex: Int, rightIndex: Int): SearchSplayNode<K, V, N> {
         val subCenters = centers.subList(leftIndex, rightIndex)
-        if (rightIndex - leftIndex > interval) {
+        if (rightIndex - leftIndex < interval) {
             return SearchSplayNode(null, null,
                                    leafFunction(subCenters),
                                    null, null)
@@ -29,10 +30,10 @@ open class ParentChildNet<K : Comparable<K>, V, N : Node<K, V>>(val centers: Lis
         val right = create(middleIndex, rightIndex)
         for (index in 0 until rightIndex - leftIndex) {
             val node = net.nodes[index]
-            if (node.key!! <= middle) {
+            if (node.key!! < middle) {
                 node.link = left[index]
             } else {
-                node.link = right[index]
+                node.link = right[index - middleIndex + leftIndex]
             }
         }
         return SearchSplayNode(middle, net, null, left, right)
@@ -47,8 +48,8 @@ open class ParentChildNet<K : Comparable<K>, V, N : Node<K, V>>(val centers: Lis
     override fun send(start: ParentChildSplayNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
         var current = root
         var begin = start as Node<K, V>
-        while (!current.isLeaf() && !(begin.key!! <= current.middle!! && finish > current.middle!!)) {
-            current = if (current.middle!! < begin.key!!) {
+        while (!current.isLeaf() && !(begin.key!! < current.middle!! && finish >= current.middle!!)) {
+            current = if (current.middle!! <= begin.key!!) {
                 current.right!!
             } else {
                 current.left!!

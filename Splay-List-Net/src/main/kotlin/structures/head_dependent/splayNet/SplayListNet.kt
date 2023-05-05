@@ -41,7 +41,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
 
     override fun insert(center: Pair<K, V>) {
         val key = center.first
-        val parent = updater.find(head, key) {}
+        val parent = updater.find(head, key, {})
         updater.insert(center.first, center.second, parent, this::visit, mainStopCondition)
     }
 
