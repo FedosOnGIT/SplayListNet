@@ -2,7 +2,7 @@ package structures.head_dependent.splayNet
 
 import model.SplayNode
 
-class TreeSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : SplayListNet<K, V>(centers) {
+open class TreeSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : SplayListNet<K, V>(centers) {
 
     init {
         for (node in nodes) {

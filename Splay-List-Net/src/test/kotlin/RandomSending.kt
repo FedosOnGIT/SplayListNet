@@ -6,6 +6,7 @@ import structures.head_dependent.skipList.SkipListNet
 import structures.head_dependent.splayNet.SimpleSplayListNet
 import structures.head_dependent.splayNet.TreeSplayListNet
 import structures.head_independent.SkipParentChildNet
+import structures.head_independent.TreeSplayParentChildNet
 import java.util.*
 
 class RandomSending {
@@ -49,4 +50,12 @@ class RandomSending {
     fun `SkipParentChildNetTest`() {
         netTesting { centers -> SkipParentChildNet(centers, 100) }
     }
+
+    @Test
+    fun `TreeSplayParentChildNetTest`() {
+        netTesting { centers -> TreeSplayParentChildNet(centers, 100) }
+    }
+
+//    @Test
+//    fun ``
 }

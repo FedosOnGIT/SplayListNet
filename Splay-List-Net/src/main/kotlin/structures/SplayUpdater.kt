@@ -20,7 +20,7 @@ class SplayUpdater<K : Comparable<K>, V>(val newLevel: (Double, Int) -> Boolean)
     }
 
     fun find(start: SplayNode<K, V>, key: K, changes: () -> Any,
-             comparing: (K, K) -> Boolean = {one, two -> one < two}): SplayNode<K, V> {
+             comparing: (K, K) -> Boolean = { one, two -> one < two }): SplayNode<K, V> {
         var current = start
         for (currentLevel in current.topLevel downTo 0) {
             var next = current.next[currentLevel]
@@ -63,14 +63,17 @@ class SplayUpdater<K : Comparable<K>, V>(val newLevel: (Double, Int) -> Boolean)
         var currentHeight = current.topLevel
 
         while (!stopCondition(current, currentHeight)) {
+//            if (current.previous.size < currentHeight) {
+//                break
+//            }
             val previous = current.previous[currentHeight]
             addHits(previous, currentHeight + 1, plus)
 
-            val ascendingCondition = (accessCounter) / (2.0.pow(maxLevel - currentHeight - 1))
+            var ascendingCondition = (accessCounter) / (2.0.pow(maxLevel - currentHeight - 1))
             val descendingCondition = (accessCounter) / (2.0.pow(maxLevel - currentHeight))
 
             //region ascending condition
-            if (previous.topLevel > currentHeight && previous.hits[currentHeight + 1] - previous.hits[currentHeight] > ascendingCondition) {
+            while (previous.topLevel > currentHeight && previous.hits[currentHeight + 1] - previous.hits[currentHeight] > ascendingCondition) {
                 val next = previous.next[currentHeight + 1]
 
                 current.next.add(next)
@@ -82,10 +85,12 @@ class SplayUpdater<K : Comparable<K>, V>(val newLevel: (Double, Int) -> Boolean)
 
                 current.hits.add(previous.hits[currentHeight + 1] - previous.hits[currentHeight] - current.selfHits)
                 previous.hits[currentHeight + 1] = previous.hits[currentHeight]
+                currentHeight = current.topLevel
+                ascendingCondition = (accessCounter) / (2.0.pow(maxLevel - currentHeight - 1))
             }
             //endregion
             //region descending condition
-            else if (getHits(previous, currentHeight) + getHits(current, currentHeight) <= descendingCondition) {
+            if (getHits(previous, currentHeight) + getHits(current, currentHeight) <= descendingCondition) {
                 val next = current.next[currentHeight]
                 previous.hits[currentHeight] += getHits(current, currentHeight)
 
