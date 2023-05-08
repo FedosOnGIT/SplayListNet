@@ -1,8 +1,9 @@
 package structures.head_dependent.splayNet
 
 import model.SplayNode
-import structures.SplayUpdater
 import structures.head_dependent.HeadDependentNet
+import utils.Searcher
+import utils.SplayUpdater
 import kotlin.math.pow
 
 abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
@@ -41,7 +42,7 @@ abstract class SplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
 
     override fun insert(center: Pair<K, V>) {
         val key = center.first
-        val parent = updater.find(head, key, {})
+        val parent = Searcher.find(head, key, {})
         updater.insert(center.first, center.second, parent, this::visit, mainStopCondition)
     }
 

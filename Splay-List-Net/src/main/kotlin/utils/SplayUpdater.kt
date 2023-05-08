@@ -1,4 +1,4 @@
-package structures
+package utils
 
 import model.SplayNode
 import kotlin.math.pow
@@ -17,24 +17,6 @@ class SplayUpdater<K : Comparable<K>, V>(val newLevel: (Double, Int) -> Boolean)
         for (level in startHeight..node.topLevel) {
             node.hits[level] += plus
         }
-    }
-
-    fun find(start: SplayNode<K, V>, key: K, changes: () -> Any,
-             comparing: (K, K) -> Boolean = { one, two -> one < two }): SplayNode<K, V> {
-        var current = start
-        for (currentLevel in current.topLevel downTo 0) {
-            var next = current.next[currentLevel]
-            while (next.key != null && comparing(next.key!!, key)) {
-                current = next
-                next = current.next[currentLevel]
-                changes()
-            }
-
-            if (next.key == key) {
-                return next
-            }
-        }
-        return current
     }
 
     fun insert(key: K, value: V, parent: SplayNode<K, V>, visit: (SplayNode<K, V>) -> Unit,

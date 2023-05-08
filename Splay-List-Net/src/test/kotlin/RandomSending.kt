@@ -1,5 +1,4 @@
 import model.Node
-import model.ServerNode
 import org.junit.jupiter.api.Test
 import structures.Net
 import structures.head_dependent.skipList.SkipListNet
@@ -7,6 +6,9 @@ import structures.head_dependent.splayNet.SimpleSplayListNet
 import structures.head_dependent.splayNet.TreeSplayListNet
 import structures.head_independent.SkipParentChildNet
 import structures.head_independent.TreeSplayParentChildNet
+import structures.probability.ProbabilityFrontTreeSplayListNet
+import structures.probability.ProbabilitySimpleSplayListNet
+import structures.probability.ProbabilityTreeSplayListNet
 import java.util.*
 
 class RandomSending {
@@ -56,6 +58,18 @@ class RandomSending {
         netTesting { centers -> TreeSplayParentChildNet(centers, 100) }
     }
 
-//    @Test
-//    fun ``
+    @Test
+    fun `ProbabilitySimpleSplayListNetTest`() {
+        netTesting { centers -> ProbabilitySimpleSplayListNet(0.1, centers) }
+    }
+
+    @Test
+    fun `ProbabilityTreeSplayListNetTest`() {
+        netTesting { centers -> ProbabilityTreeSplayListNet(0.1, centers) }
+    }
+
+    @Test
+    fun `ProbabilityFrontTreeSplayListNetTest`() {
+        netTesting { centers -> ProbabilityFrontTreeSplayListNet(0.1, centers) }
+    }
 }

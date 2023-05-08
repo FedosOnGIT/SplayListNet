@@ -1,8 +1,8 @@
 package structures.head_dependent.skipList
 
 import model.SkipNode
-import structures.Searcher
 import structures.head_dependent.HeadDependentNet
+import utils.Searcher
 import java.util.*
 
 class SkipListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>, val random: Random = Random()) :

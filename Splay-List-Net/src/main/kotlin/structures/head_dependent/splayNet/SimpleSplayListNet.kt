@@ -1,9 +1,9 @@
 package structures.head_dependent.splayNet
 
 import model.SplayNode
+import utils.Searcher
 
-class SimpleSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
-    SplayListNet<K, V>(centers) {
+open class SimpleSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : SplayListNet<K, V>(centers) {
 
     override fun send(start: SplayNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
         var steps = 0L
@@ -12,7 +12,7 @@ class SimpleSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) :
         visit(start)
         updater.update(start, changes, 1, mainStopCondition)
 
-        val end =  updater.find(head, finish, changes)
+        val end = Searcher.find(head, finish, changes)
         if (end.key != finish) {
             throw RuntimeException("No such key as $finish")
         }

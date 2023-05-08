@@ -1,4 +1,4 @@
-package structures
+package utils
 
 import model.ServerNode
 import model.SplayNode
@@ -36,17 +36,34 @@ class Searcher {
             throw RuntimeException("Request between ${start.key} and $finish not succeeded")
         }
 
-        fun <K : Comparable<K>, V> backSearch(start: SplayNode<K, V>,
-                                              stopCondition: (SplayNode<K, V>, Int) -> Boolean): Pair<SplayNode<K, V>, Long> {
-            var steps = 0L
+        fun <K : Comparable<K>, V> find(start: SplayNode<K, V>, key: K, changes: () -> Any,
+                                        comparing: (K, K) -> Boolean = { one, two -> one < two }): SplayNode<K, V> {
+            var current = start
+            for (currentLevel in current.topLevel downTo 0) {
+                var next = current.next[currentLevel]
+                while (next.key != null && comparing(next.key!!, key)) {
+                    current = next
+                    next = current.next[currentLevel]
+                    changes()
+                }
+
+                if (next.key == key) {
+                    return next
+                }
+            }
+            return current
+        }
+
+        fun <K : Comparable<K>, V> backFind(start: SplayNode<K, V>, changes: () -> Any,
+                                            stopCondition: (SplayNode<K, V>, Int) -> Boolean): SplayNode<K, V> {
             var current = start
             var currentLevel = start.topLevel
             while (!stopCondition(current, currentLevel)) {
                 current = current.previous[currentLevel]
                 currentLevel = current.topLevel
-                steps++
+                changes()
             }
-            return Pair(current, steps)
+            return current
         }
     }
 }

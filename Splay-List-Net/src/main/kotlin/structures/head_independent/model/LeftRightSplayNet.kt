@@ -3,7 +3,8 @@ package structures.head_independent.model
 import model.ParentChildSplayNode
 import model.SplayNode
 import structures.Net
-import structures.SplayUpdater
+import utils.Searcher
+import utils.SplayUpdater
 import kotlin.math.pow
 
 class LeftRightSplayNet<K : Comparable<K>, V>(val middle: K, centers: List<Pair<K, V>>) :
@@ -78,9 +79,9 @@ class LeftRightSplayNet<K : Comparable<K>, V>(val middle: K, centers: List<Pair<
     override fun insert(center: Pair<K, V>) {
         val key = center.first
         val parent = if (key < middle) {
-            updater.find(leftMiddle, key, {}, {one, two -> one > two})
+            Searcher.find(leftMiddle, key, {}, { one, two -> one > two })
         } else {
-            updater.find(rightMiddle, key, {})
+            Searcher.find(rightMiddle, key, {})
         }
         updater.insert(key, center.second, parent, this::visit, stopCondition) { k, v ->
             ParentChildSplayNode(k, v, null)
@@ -94,7 +95,7 @@ class LeftRightSplayNet<K : Comparable<K>, V>(val middle: K, centers: List<Pair<
         visit(start)
         updater.update(start, changes, 1, stopCondition)
         changes()
-        val end = updater.find(rightMiddle, finish, changes)
+        val end = Searcher.find(rightMiddle, finish, changes)
         visit(end)
         updater.update(end, changes, 1, stopCondition)
 

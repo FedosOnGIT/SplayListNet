@@ -1,20 +1,20 @@
 package structures.probability
 
 import model.SplayNode
-import structures.Searcher
 import structures.head_dependent.splayNet.TreeSplayListNet
-import java.util.Random
+import utils.ProbabilitySearcher
 
-class ProbabilityTreeSplayListNet<K : Comparable<K>, V>(private val probability: Double, centers: List<Pair<K, V>>) :
+class ProbabilityTreeSplayListNet<K : Comparable<K>, V>(probability: Double, centers: List<Pair<K, V>>) :
     TreeSplayListNet<K, V>(centers) {
-    var generator = Random()
+    private val searcher = ProbabilitySearcher<K, V>(probability)
 
     override fun send(start: SplayNode<K, V>, finish: K, function: (V, V) -> Unit): Long {
-        val chance = generator.nextDouble()
-        return if (chance < probability) {
+        return if (searcher.decide()) {
             super.send(start, finish, function)
         } else {
-            Searcher.search(start, finish, function)
+            val stopCondition: (SplayNode<K, V>, Int) -> Boolean =
+                { node, height -> parentStopCondition(finish, node, height) }
+            searcher.send(start, finish, function, stopCondition)
         }
     }
 }
