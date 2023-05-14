@@ -6,7 +6,7 @@ import utils.Searcher
 open class TreeSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : SplayListNet<K, V>(centers) {
 
     protected val parentStopCondition: (K, SplayNode<K, V>, Int) -> Boolean = { finish, node, height ->
-        node.next[height].key == null || node.next[height].key!! >= finish
+        node.next[height].key == null || node.next[height].key!! > finish || node.next[height].key == finish && node.next[height].topLevel == height
     }
 
     init {
@@ -31,7 +31,7 @@ open class TreeSplayListNet<K : Comparable<K>, V>(centers: List<Pair<K, V>>) : S
         }
 
         visit(end)
-        updater.update(end, changes, 1, stopCondition)
+        updater.update(end, changes, 1) { node, _ -> node == parent }
         updater.update(parent, changes, 2, mainStopCondition)
 
         function(start.value!!, end.value!!)

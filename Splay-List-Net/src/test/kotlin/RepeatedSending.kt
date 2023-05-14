@@ -13,7 +13,7 @@ import kotlin.math.pow
 class RepeatedSending {
     companion object {
         fun <N : Node<Int, Int>> netTesting(creation: (MutableList<Pair<Int, Int>>) -> Net<Int, Int, N>, degree: Int) {
-            val seed = Random().nextLong()
+            val seed = degree.toLong()
             try {
                 val repeats = 2.0.pow(degree).toInt()
                 val centers = ArrayList<Pair<Int, Int>>()

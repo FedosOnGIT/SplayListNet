@@ -45,9 +45,6 @@ class SplayUpdater<K : Comparable<K>, V>(val newLevel: (Double, Int) -> Boolean)
         var currentHeight = current.topLevel
 
         while (!stopCondition(current, currentHeight)) {
-//            if (current.previous.size < currentHeight) {
-//                break
-//            }
             val previous = current.previous[currentHeight]
             addHits(previous, currentHeight + 1, plus)
 
