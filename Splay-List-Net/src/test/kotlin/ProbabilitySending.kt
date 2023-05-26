@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import structures.head_dependent.splayNet.SplayListNet
 import structures.probability.ProbabilityFrontTreeSplayListNet
 import structures.probability.ProbabilitySimpleSplayListNet

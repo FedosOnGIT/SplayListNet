@@ -1,0 +1,8 @@
+SkipListNet 6 
+SimpleSplayListNet 5 
+TreeSplayListNet 4 
+SkipParentChildNet 4 
+TreeSplayParentChildNet 4 
+ProbabilitySimpleSplayListNet 3 
+ProbabilityTreeSplayListNet 2 
+ProbabilityFrontTreeSplayListNet 2 

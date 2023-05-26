@@ -1,5 +1,5 @@
 import model.Node
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import structures.Net
 import structures.head_dependent.skipList.SkipListNet
 import structures.head_dependent.splayNet.SimpleSplayListNet
