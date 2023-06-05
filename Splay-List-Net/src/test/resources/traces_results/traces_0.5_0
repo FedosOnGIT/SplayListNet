@@ -1,8 +1,8 @@
-SkipListNet 14 
-SimpleSplayListNet 19 
-TreeSplayListNet 18 
-SkipParentChildNet 14 
-TreeSplayParentChildNet 14 
-ProbabilitySimpleSplayListNet 12 
-ProbabilityTreeSplayListNet 11 
-ProbabilityFrontTreeSplayListNet 10 
+SkipListNet 14.35 
+SimpleSplayListNet 19.84 
+TreeSplayListNet 18.14 
+SkipParentChildNet 14.19 
+TreeSplayParentChildNet 14.19 
+ProbabilitySimpleSplayListNet 12.85 
+ProbabilityTreeSplayListNet 11.43 
+ProbabilityFrontTreeSplayListNet 10.23 
